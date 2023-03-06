@@ -4,7 +4,7 @@
       <div class="ht-1"><span>问卷调查系统</span></div>
       <div class="ht-2">
         <span
-          >为工作提供多方位的服务，内置多种问卷模板，简洁美观的问卷编辑页面，你值得拥有</span
+          >为工作提供多方位的服务，内置多种问卷模板，简洁美观的问卷编辑页面haoye，你值得拥有</span
         >
       </div>
       <el-button
