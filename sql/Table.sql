@@ -1,7 +1,6 @@
 CREATE DATABASE IF NOT EXISTS `surveydb`;
 USE surveydb;
 
-
 -- ---------------------------------------------------------------------------------------------------------------------
 
 -- 用户信息表
@@ -25,15 +24,16 @@ DROP TABLE IF EXISTS `survey_info`;
 CREATE TABLE `survey_info`(
     `survey_id` int UNSIGNED AUTO_INCREMENT, -- 问卷id(自增
     `created_user_id` int UNSIGNED NOT NULL , -- 创建用户id
-    `survey_title`    varchar(255),    -- 问卷标题 a
+    `survey_title`    varchar(255),    -- 问卷标题
     `remark`    varchar(255) DEFAULT NULL, -- 备注
     `created_time`   timestamp   DEFAULT CURRENT_TIMESTAMP,  -- 创建时间
+    `state`     int DEFAULT 0, -- 问卷状态 0:未发布/1:已发布/2:已结束
 
     PRIMARY KEY (`survey_id`)
 )ENGINE = InnoDB DEFAULT  CHARSET = utf8;
 
 -- Record of survey_info
-INSERT INTO `survey_info`(`created_user_id`, `survey_title`, `remark`) VALUES (1, '大学生午睡调查', NULL);
+INSERT INTO `survey_info`(`created_user_id`, `survey_title`, `state`, `remark`) VALUES (1, '大学生午睡调查', 0, NULL);
 
 -- ---------------------------------------------------------------------------------------------------------------------
 
@@ -43,6 +43,7 @@ CREATE TABLE `question_info`(
     `survey_id`   int UNSIGNED NOT NULL, -- 所属问卷id
     `question_id` int UNSIGNED AUTO_INCREMENT, -- 问题id(自增
     `question`    text NOT NULL, -- 题面描述
+    `question_order` int NOT NULL , -- 问题排序
     `type`        int NOT NULL, -- 题目类型 0为判断 1为单选 2为多选 3为简答填空
     `remark`      varchar(255)  NULL, -- 备注
 
@@ -50,7 +51,7 @@ CREATE TABLE `question_info`(
 )ENGINE = InnoDB DEFAULT  CHARSET = utf8;
 
 -- Record of question_info
-INSERT INTO `question_info`(`survey_id`, `question`, `type`, `remark`) VALUES ( 1, '你是否睡午觉？', 0, NULL);
+INSERT INTO `question_info`(`survey_id`, `question`, `question_order`, `type`, `remark`) VALUES ( 1, '你是否睡午觉？', 1, 0, NULL);
 
 -- ---------------------------------------------------------------------------------------------------------------------
 
@@ -85,6 +86,5 @@ CREATE TABLE `fill_in`(
 
 -- Record of fill_in
 INSERT INTO `fill_in`(`survey_id`, `question_id`, `option_id`, `user_id`) VALUES (1, 1, 1, 1);
-INSERT INTO `fill_in`(`survey_id`, `question_id`, `option_id`, `user_id`) VALUES (1, 1, 2, 1);
 
 -- ---------------------------------------------------------------------------------------------------------------------
