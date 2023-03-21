@@ -28,6 +28,7 @@ CREATE TABLE `survey_info`(
     `remark`    varchar(255) DEFAULT NULL, -- 备注
     `created_time`   timestamp   DEFAULT CURRENT_TIMESTAMP,  -- 创建时间
     `state`     int DEFAULT 0, -- 问卷状态 0:未发布/1:已发布/2:已结束
+    `analysis` text NULL, -- 数据分析报告
 
     PRIMARY KEY (`survey_id`)
 )ENGINE = InnoDB DEFAULT  CHARSET = utf8;
@@ -71,7 +72,7 @@ INSERT INTO `option_info`(`question_id`, `content`) VALUES (1, '否');
 
 -- ---------------------------------------------------------------------------------------------------------------------
 
--- 填写信息表
+-- 填写记录表
 DROP TABLE IF EXISTS `fill_in`;
 CREATE TABLE `fill_in`(
     `fill_id` int   UNSIGNED AUTO_INCREMENT, -- 填写id
