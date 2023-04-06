@@ -4,7 +4,7 @@ USE surveydb;
 -- ---------------------------------------------------------------------------------------------------------------------
 
 -- 用户信息表
-DROP TABLE IF EXISTS `user`;
+DROP TABLE IF EXISTS `user_info`;
 CREATE TABLE `user_info`(
     `user_id`  int     UNSIGNED  AUTO_INCREMENT,  -- 用户id(自增
     `name`     varchar(255) UNIQUE NOT NULL,    -- 用户名
@@ -35,7 +35,7 @@ CREATE TABLE `survey_info`(
 
 -- Record of survey_info
 INSERT INTO `survey_info`(`created_user_id`, `survey_title`, `state`, `remark`) VALUES (1, '大学生午睡调查', 0, NULL);
-
+INSERT INTO `survey_info`(`created_user_id`, `survey_title`, `state`, `remark`) VALUES (1, '大学生早餐调查', 0, NULL);
 -- ---------------------------------------------------------------------------------------------------------------------
 
 -- 题目信息表
@@ -45,7 +45,7 @@ CREATE TABLE `question_info`(
     `question_id` int UNSIGNED AUTO_INCREMENT, -- 问题id(自增
     `question`    text NOT NULL, -- 题面描述
     `question_order` int NOT NULL , -- 问题排序
-    `type`        int NOT NULL, -- 题目类型 0为判断 1为单选 2为多选 3为简答填空
+    `type`        int NOT NULL, -- 题目类型 0为判断 1为单选 2为多选 3为单行填空 4为多行填空
     `remark`      varchar(255)  NULL, -- 备注
 
     PRIMARY KEY (`question_id`)
@@ -53,7 +53,10 @@ CREATE TABLE `question_info`(
 
 -- Record of question_info
 INSERT INTO `question_info`(`survey_id`, `question`, `question_order`, `type`, `remark`) VALUES ( 1, '你是否睡午觉？', 1, 0, NULL);
-
+INSERT INTO `question_info`(`survey_id`, `question`, `question_order`, `type`, `remark`) VALUES ( 1, '午睡一般多少时常？', 2, 3, NULL);
+INSERT INTO `question_info`(`survey_id`, `question`, `question_order`, `type`, `remark`) VALUES ( 2, '你是否吃早餐？', 1, 0, NULL);
+INSERT INTO `question_info`(`survey_id`, `question`, `question_order`, `type`, `remark`) VALUES ( 2, '你在早餐上花费多少钱？', 2, 3, NULL);
+INSERT INTO `question_info`(`survey_id`, `question`, `question_order`, `type`, `remark`) VALUES ( 3, '你一天睡眠有几个小时？', 1, 3, NULL);
 -- ---------------------------------------------------------------------------------------------------------------------
 
 -- 题目选项表
@@ -69,6 +72,8 @@ CREATE TABLE `option_info`(
 -- Records of option_info
 INSERT INTO `option_info`(`question_id`, `content`) VALUES (1, '是');
 INSERT INTO `option_info`(`question_id`, `content`) VALUES (1, '否');
+INSERT INTO `option_info`(`question_id`, `content`) VALUES (2, '10');
+INSERT INTO `option_info`(`question_id`, `content`) VALUES (2, '9');
 
 -- ---------------------------------------------------------------------------------------------------------------------
 
@@ -87,5 +92,7 @@ CREATE TABLE `fill_in`(
 
 -- Record of fill_in
 INSERT INTO `fill_in`(`survey_id`, `question_id`, `option_id`, `user_id`) VALUES (1, 1, 1, 1);
-
+INSERT INTO `fill_in`(`survey_id`, `question_id`, `option_id`, `user_id`) VALUES (1, 2, 3, 1);
+INSERT INTO `fill_in`(`survey_id`, `question_id`, `option_id`, `user_id`) VALUES (1, 1, 2, 2);
+INSERT INTO `fill_in`(`survey_id`, `question_id`, `option_id`, `user_id`) VALUES (1, 2, 4, 2);
 -- ---------------------------------------------------------------------------------------------------------------------
