@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.surveysystemtext.mapper.QuestionMapper">
+
+    <resultMap id="Questio1" type="com.example.surveysystemtext.entity.Question">
+        <result property="survey_id" column="survey_id"/>
+        <result property="question_id" column="question_id"/>
+        <result property="question" column="question"/>
+        <result property="question_order" column="question_order"/>
+        <result property="type" column="type"/>
+        <result property="remark" column="remark"/>
+        <collection property="OptionList" javaType="List" ofType="com.example.surveysystemtext.entity.Question" column="{question_id=question_id}"
+                    select="com.example.surveysystemtext.mapper.OptionMapper.FindOption"/>
+    </resultMap>
+
+    <select id="FindQuestion" parameterType="com.example.surveysystemtext.entity.Survey" resultMap="Questio1">
+        SELECT *
+            FROM `question_info`
+                WHERE `survey_id` = #{survey_id}
+        ORDER BY question_order
+    </select>
+
+    <insert id="InsertQuestion" parameterType="com.example.surveysystemtext.entity.Question">
+        INSERT INTO `question_info`(`survey_id`, `question`, `question_order`, `type`, `remark`)
+            VALUES (#{survey_id}, #{question}, #{question_order}, #{type}, #{remark});
+    </insert>
+
+    <update id="UpdateQuestion" parameterType="com.example.surveysystemtext.entity.Question">
+        UPDATE `question_info`
+        <set>
+            <if test="question != null">
+                `question` = #{question},
+            </if>
+            <if test="question_order != null">
+                `question_order` = #{question_order},
+            </if>
+            <if test="type != null">
+                `type` = #{type},
+            </if>
+            <if test="remark != null">
+                `remark` = #{remark}
+            </if>
+        </set>
+        WHERE `question_id` = #{question_id}
+    </update>
+
+    <delete id="DeleteQuestion" parameterType="com.example.surveysystemtext.entity.Question">
+        DELETE
+            FROM `question_info`
+                WHERE `question_id` = #{question_id}
+    </delete>
+</mapper>

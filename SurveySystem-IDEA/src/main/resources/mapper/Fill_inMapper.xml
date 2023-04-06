@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.surveysystemtext.mapper.Fill_inMapper">
+    <select id="Count_OptionFill_in" parameterType="com.example.surveysystemtext.entity.Option" resultType="int">
+        SELECT COUNT(*)
+            FROM `fill_in`
+                WHERE `option_id` = #{option_id}
+    </select>
+
+    <select id="Count_SurveyFill_in" parameterType="com.example.surveysystemtext.entity.Survey" resultType="int">
+        SELECT COUNT(DISTINCT `survey_id`, `user_id`)
+            FROM `fill_in`
+                WHERE `survey_id` = #{survey_id}
+    </select>
+</mapper>

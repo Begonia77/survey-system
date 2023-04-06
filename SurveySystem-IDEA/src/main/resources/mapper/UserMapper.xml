@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.surveysystemtext.mapper.UserMapper">
+
+    <select id="findAll" resultType="com.example.surveysystemtext.entity.User">
+        SELECT *
+            FROM `user_info`
+    </select>
+
+    <select id="count" parameterType="com.example.surveysystemtext.entity.User" resultType="int">
+        SELECT COUNT(*)
+            FROM `survey_info`
+                WHERE `created_user_id` = #{user_id}
+    </select>
+
+
+    <resultMap type="com.example.surveysystemtext.entity.Survey" id = "syrvey1">
+        <result property="created_user_id" column="created_user_id"/>
+        <result property="survey_title" column="survey_title"/>
+        <result property="remark" column="remark"/>
+        <result property="created_time" column="created_time"/>
+        <result property="state" column="state"/>
+        <result property="analysis" column="analysis"/>
+        <collection property="count_fill_in" javaType="int" ofType="com.example.surveysystemtext.entity.Survey" column="{survey_id=survey_id}"
+                    select="com.example.surveysystemtext.mapper.Fill_inMapper.Count_SurveyFill_in"/>
+        <collection property="count_question" javaType="int" ofType="com.example.surveysystemtext.entity.Survey" column="{survey_id=survey_id}"
+                    select="com.example.surveysystemtext.mapper.SurveyMapper.CountQuestion"/>
+    </resultMap>
+
+    <select id="findSurvey" parameterType="com.example.surveysystemtext.entity.User" resultMap="syrvey1">
+        SELECT *
+            FROM `survey_info`
+                WHERE  `created_user_id` = #{user_id}
+    </select>
+    
+
+    <insert id="insertuser" parameterType="com.example.surveysystemtext.entity.User">
+        INSERT INTO `user_info`(`name`, `password`) VALUES (#{name}, #{password})
+    </insert>
+
+    <update id = "UpInfo" parameterType="com.example.surveysystemtext.entity.User">
+         UPDATE `user_info`
+        <set>
+            <if test="name != null">
+                `name` = #{name},
+            </if>
+            <if test="password != null">
+                `password` = #{password}
+            </if>
+        </set>
+            WHERE `user_id` = #{user_id}
+    </update>
+
+    <select id="findUser_infoByName" parameterType="com.example.surveysystemtext.entity.User" resultType="com.example.surveysystemtext.entity.User">
+        SELECT *
+            FROM `user_info`
+                WHERE `name` = #{name}
+    </select>
+
+    <select id="findPasswordByname" parameterType="com.example.surveysystemtext.entity.User" resultType="com.example.surveysystemtext.entity.User">
+        SELECT
+    </select>
+</mapper>

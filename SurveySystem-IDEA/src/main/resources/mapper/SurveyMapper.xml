@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.surveysystemtext.mapper.SurveyMapper">
+    <select id="CountQuestion"  parameterType="com.example.surveysystemtext.entity.Survey" resultType="int">
+        SELECT COUNT(*)
+            FROM `question_info`
+                WHERE `survey_id` = #{survey_id}
+    </select>
+
+
+    <select id="findAllSurvey" resultMap="com.example.surveysystemtext.mapper.UserMapper.syrvey1">
+        SELECT *
+            FROM `survey_info`
+    </select>
+
+
+    <insert id="InsertSurvey" parameterType="com.example.surveysystemtext.entity.Survey">
+        INSERT INTO `survey_info` (created_user_id, survey_title, state, remark)
+            VALUES (#{created_user_id}, #{survey_title}, #{state}, #{remark});
+    </insert>
+
+    <update id="UpdataSurvey" parameterType="com.example.surveysystemtext.entity.Survey">
+        UPDATE `survey_info`
+        <set>
+            <if test="survey_title != null">
+                `survey_title` = #{survey_title},
+            </if>
+            <if test="remark != null">
+                `remark` = #{remark},
+            </if>
+            <if test="state != null">
+                `state` = #{state},
+            </if>
+            <if test="analysis">
+                `analysis` = #{analysis}
+            </if>
+        </set>
+            WHERE `survey_id` = #{survey_id}
+    </update>
+
+    <resultMap id="survey2" type="com.example.surveysystemtext.entity.Survey">
+        <result property="survey_id" column="survey_id"/>
+        <result property="created_user_id" column="created_user_id"/>
+        <result property="survey_title" column="survey_title"/>
+        <result property="remark" column="remark"/>
+        <result property="created_time" column="created_time"/>
+        <result property="state" column="state"/>
+        <result property="analysis" column="analysis"/>
+        <collection property="count_question" javaType="int" ofType="com.example.surveysystemtext.entity.Survey" column="{survey_id=survey_id}"
+                    select="com.example.surveysystemtext.mapper.SurveyMapper.CountQuestion"/>
+        <collection property="count_fill_in" javaType="int" ofType="com.example.surveysystemtext.entity.Survey" column="{survey_id=survey_id}"
+                    select="com.example.surveysystemtext.mapper.Fill_inMapper.Count_SurveyFill_in"/>
+        <collection property="QuestionList" javaType="List" ofType="com.example.surveysystemtext.entity.Survey" column="{survey_id=survey_id}"
+                    select="com.example.surveysystemtext.mapper.QuestionMapper.FindQuestion"/>
+    </resultMap>
+
+    <select id="FindAllSurveyInfo" parameterType="com.example.surveysystemtext.entity.Survey" resultMap="survey2">
+        SELECT *
+            FROM `survey_info`
+                WHERE `survey_id` = #{survey_id}
+    </select>
+
+    <delete id="DeleteSurvey" parameterType="com.example.surveysystemtext.entity.Survey">
+        DELETE
+            FROM `survey_info`
+                WHERE `survey_id` = #{survey_id}
+    </delete>
+
+</mapper>
