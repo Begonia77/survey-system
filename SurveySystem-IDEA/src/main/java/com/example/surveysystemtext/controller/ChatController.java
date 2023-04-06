@@ -1,11 +1,15 @@
 package com.example.surveysystemtext.controller;
 
+import com.example.surveysystemtext.controller.vo.GPTDescripeVO;
+import com.example.surveysystemtext.controller.vo.GPTGenerateRespVO;
 import com.example.surveysystemtext.entity.DataMessage;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.plexpt.chatgpt.ChatGPT;
 import com.plexpt.chatgpt.entity.chat.ChatCompletion;
 import com.plexpt.chatgpt.entity.chat.ChatCompletionResponse;
 import com.plexpt.chatgpt.entity.chat.Message;
 import com.plexpt.chatgpt.util.Proxys;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +25,8 @@ public class ChatController {
     private String apiHost;
 
     @PostMapping("/generate")
-    public Message generate(@RequestBody DataMessage dataMessage) {
+    @SneakyThrows
+    public GPTGenerateRespVO generate(@RequestBody DataMessage dataMessage) {
 
         ChatGPT chatGPT = ChatGPT.builder()
                 .timeout(600)
@@ -31,140 +36,40 @@ public class ChatController {
                 .build()
                 .init();
 
-        Message system = Message.ofSystem("""
+        Message system = Message.ofSystem(String.format("""
                 请你根据我输入给你的问卷主题随机生成一份调查问卷，其中包括问卷的所有题目，问卷中只有选择题，题目数量输出2题，并用JSON的方式完成输入输出，使用下面的格式完成输入输出：
-
-
                 输入:
-                {
-                "keyword": "大学生就业情况调查"
-                }
-
-
+                 {"keyword": "大学生就业情况调查"}
                 输出:
-                [
-                {
-                "title": "您目前就读的专业属于以下哪种类型？",
-                "optionList": [
-                {
-                "text": "理工科"
-                },
-                {
-                "text": "文史类"
-                },
-                {
-                "text": "医学类"
-                },
-                {
-                "text": "艺术类"
-                },
-                {
-                "text": "其他"
-                }
-                ]
-                },
-                {
-                "title": "您较为关心以下哪方面的就业问题？",
-                "optionList": [
-                {
-                "text": "行业前景"
-                },
-                {
-                "text": "职业发展"
-                },
-                {
-                "text": "薪资待遇"
-                },
-                {
-                "text": "工作稳定性"
-                },
-                {
-                "text": "其他"
-                }
-                ]
-                },
-                {
-                "title": "您对以下哪种职业类型最感兴趣？",
-                "optionList": [
-                {
-                "text": "互联网/IT"
-                },
-                {
-                "text": "金融/投资"
-                },
-                {
-                "text": "教育/科研"
-                },
-                {
-                "text": "艺术/传媒"
-                },
-                {
-                "text": "医疗/生物"
-                },
-                {
-                "text": "公务员/事业单位"
-                },
-                {
-                "text": "其他"
-                }
-                ]
-                },
-                {
-                "title": "以下哪种求职方式您更倾向于采用？",
-                "optionList": [
-                {
-                "text": "网络招聘"
-                },
-                {
-                "text": "校园招聘"
-                },
-                {
-                "text": "猎头/中介"
-                },
-                {
-                "text": "自主求职"
-                },
-                {
-                "text": "其他"
-                }
-                ]
-                },
-                {
-                "title": "您对于未来几年国内经济发展形势的预期是？",
-                "optionList": [
-                {
-                "text": "十分乐观"
-                },
-                {
-                "text": "比较乐观"
-                },
-                {
-                "text": "持中立态度"
-                },
-                {
-                "text": "比较悲观"
-                },
-                {
-                "text": "十分悲观"
-                }
-                ]
-                }
-                ]""");
-        Message message = Message.of(dataMessage.getPrompt());
+                 {"questionList":[{"title":"您目前就读的专业属于以下哪种类型？","optionList":[{"text":"理工科"},{"text":"文史类"},{"text":"医学类"},{"text":"艺术类"},{"text":"其他"}]}]}
+                 
+                输入:
+                 {"keyword": "%s"}
+                输出:
+                 """, dataMessage.getPrompt()));
         ChatCompletion chatCompletion = ChatCompletion.builder()
                 .model(ChatCompletion.Model.GPT_3_5_TURBO.getName())
-                .messages((List.of(system, message)))
+                .messages(List.of(system))
                 .maxTokens(3000)
                 .temperature(0.9)
                 .build();
 
         ChatCompletionResponse response = chatGPT.chatCompletion(chatCompletion);
         Message result = response.getChoices().get(0).getMessage();
-        return result;
+        ObjectMapper mapper = new ObjectMapper();
+        GPTGenerateRespVO respVO;
+        try {
+            respVO = mapper.readValue(result.getContent(), GPTGenerateRespVO.class);
+        } catch (Exception e) {
+            System.out.println("解析失败");
+            System.out.println(e);
+            return new GPTGenerateRespVO();
+        }
+        return respVO;
     }
 
     @PostMapping("/description")
-    public Message description(@RequestBody DataMessage dataMessage) {
+    public GPTDescripeVO description(@RequestBody DataMessage dataMessage) {
         ChatGPT chatGPT = ChatGPT.builder()
                 .timeout(600)
                 .apiKey(apiKey)
@@ -183,6 +88,8 @@ public class ChatController {
 
         ChatCompletionResponse response = chatGPT.chatCompletion(chatCompletion);
         Message result = response.getChoices().get(0).getMessage();
-        return result;
+        GPTDescripeVO respVO = new GPTDescripeVO();
+        respVO.setContent(result.getContent());
+        return respVO;
     }
 }
