@@ -1,12 +1,12 @@
 server:
-  port: 8080
+  port: 8082
 
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/surveydb?serverTimezone=GMT%2b8
+    url: jdbc:mysql://localhost:3307/surveydb?serverTimezone=GMT%2b8
     username: root
-    password: JGOWJIj01kG5mZpZ
+    password: wryte
 
 mybatis-plus:
   mapper-locations: classpath:mapper/*.xml
