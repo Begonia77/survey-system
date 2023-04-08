@@ -13,7 +13,6 @@ import java.util.List;
 public class OptionController {
     @Autowired
     private OptionMapper optionMapper;
-
     @PostMapping("/FindOption")//根据问题id查询所有选项
     public List<Option> FindOption(@RequestBody Question question){
         return optionMapper.FindOption(question);
