@@ -8,5 +8,6 @@ spring:
     username: root
     password: JGOWJIj01kG5mZpZ
 
-mybatis:
+mybatis-plus:
   mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.example.surveysystemtext.entity

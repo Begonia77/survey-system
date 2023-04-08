@@ -2,37 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.surveysystemtext.mapper.OptionMapper">
     <resultMap id="qption1" type="com.example.surveysystemtext.entity.Option">
-        <result property="question_id" column="question_id"/>
-        <result property="option_id" column="option_id"/>
+        <result property="questionId" column="question_id"/>
+        <result property="optionId" column="option_id"/>
         <result property="content" column="content"/>
-        <collection property="count" javaType="int" ofType="com.example.surveysystemtext.entity.Option" column="{option_id=option_id}"
-                    select="com.example.surveysystemtext.mapper.Fill_inMapper.Count_OptionFill_in"/>
+        <collection property="count" javaType="int" ofType="com.example.surveysystemtext.entity.Option" column="{optionId = option_id}"
+                    select="com.example.surveysystemtext.mapper.FillInMapper.Count_OptionFill_in"/>
     </resultMap>
 
     <select id="FindOption" parameterType="com.example.surveysystemtext.entity.Question" resultMap="qption1">
         SELECT *
             FROM `option_info`
-                WHERE `question_id` = #{question_id}
+                WHERE `question_id` = #{questionId}
     </select>
 
-    <insert id="InsertOption" parameterType="com.example.surveysystemtext.entity.Option">
-        INSERT INTO `option_info`(`question_id`, `content`)
-            VALUES (#{question_id}, #{content});
-    </insert>
-
-    <update id="UpdateOption" parameterType="com.example.surveysystemtext.entity.Option">
-        UPDATE `option_info`
-        <set>
-            <if test="content != null">
-                `content` = #{content}
-            </if>
-        </set>
-        WHERE `option_id` = #{option_id}
-    </update>
-
-    <delete id="DeleteOption" parameterType="com.example.surveysystemtext.entity.Option">
-        DELETE
-            FROM `option_info`
-                WHERE `option_id` = #{option_id}
-    </delete>
 </mapper>

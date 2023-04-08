@@ -5,13 +5,15 @@ USE surveydb;
 
 -- 用户信息表
 DROP TABLE IF EXISTS `user_info`;
-CREATE TABLE `user_info`(
-    `user_id`  int     UNSIGNED  AUTO_INCREMENT,  -- 用户id(自增
-    `name`     varchar(255) UNIQUE NOT NULL,    -- 用户名
-    `password` varchaR(255) NOT NULL,    -- 用户密码
-    `created_time` timestamp DEFAULT CURRENT_TIMESTAMP, -- 创建时间
-
-    PRIMARY KEY (`user_id`)
+create table user_info
+(
+    user_id      bigint auto_increment
+        primary key,
+    name         varchar(255)                        not null,
+    password     varchar(255)                        not null,
+    created_time timestamp default CURRENT_TIMESTAMP null,
+    constraint name
+        unique (name)
 )ENGINE = InnoDB DEFAULT CHARSET = utf8;
 
 -- Records of user_info
@@ -21,16 +23,16 @@ INSERT INTO `user_info`(`name`, `password`) VALUES ('sa', '123456');
 
 -- 问卷信息表
 DROP TABLE IF EXISTS `survey_info`;
-CREATE TABLE `survey_info`(
-    `survey_id` int UNSIGNED AUTO_INCREMENT, -- 问卷id(自增
-    `created_user_id` int UNSIGNED NOT NULL , -- 创建用户id
-    `survey_title`    varchar(255),    -- 问卷标题
-    `remark`    varchar(255) DEFAULT NULL, -- 备注
-    `created_time`   timestamp   DEFAULT CURRENT_TIMESTAMP,  -- 创建时间
-    `state`     int DEFAULT 0, -- 问卷状态 0:未发布/1:已发布/2:已结束
-    `analysis` text NULL, -- 数据分析报告
-
-    PRIMARY KEY (`survey_id`)
+create table survey_info
+(
+    survey_id       bigint auto_increment
+        primary key,
+    created_user_id bigint                              not null,
+    survey_title    varchar(255)                        null,
+    remark          varchar(255)                        null,
+    created_time    timestamp default CURRENT_TIMESTAMP null,
+    state           int       default 0                 null,
+    analysis        text                                null
 )ENGINE = InnoDB DEFAULT  CHARSET = utf8;
 
 -- Record of survey_info
@@ -39,16 +41,16 @@ INSERT INTO `survey_info`(`created_user_id`, `survey_title`, `state`, `remark`) 
 -- ---------------------------------------------------------------------------------------------------------------------
 
 -- 题目信息表
-DROP TABLE IF EXISTS `question_info`;
-CREATE TABLE `question_info`(
-    `survey_id`   int UNSIGNED NOT NULL, -- 所属问卷id
-    `question_id` int UNSIGNED AUTO_INCREMENT, -- 问题id(自增
-    `question`    text NOT NULL, -- 题面描述
-    `question_order` int NOT NULL , -- 问题排序
-    `type`        int NOT NULL, -- 题目类型 0为判断 1为单选 2为多选 3为单行填空 4为多行填空
-    `remark`      varchar(255)  NULL, -- 备注
-
-    PRIMARY KEY (`question_id`)
+DROP TABLE IF EXISTS question_info;
+create table question_info
+(
+    survey_id      bigint       not null,
+    question_id    bigint auto_increment
+        primary key,
+    question       text         not null,
+    question_order int          not null,
+    type           int          not null,
+    remark         varchar(255) null
 )ENGINE = InnoDB DEFAULT  CHARSET = utf8;
 
 -- Record of question_info
@@ -61,12 +63,12 @@ INSERT INTO `question_info`(`survey_id`, `question`, `question_order`, `type`, `
 
 -- 题目选项表
 DROP TABLE  IF EXISTS `option_info`;
-CREATE TABLE `option_info`(
-    `question_id` int NOT NULL, -- 所属问题id
-    `option_id` int UNSIGNED AUTO_INCREMENT, -- 选项id(自增
-    `content` text NOT NULL, -- 选项内容/填写内容
-
-    PRIMARY KEY (`option_id`)
+create table option_info
+(
+    question_id bigint not null,
+    option_id   bigint auto_increment
+        primary key,
+    content     text   not null
 )ENGINE = InnoDB DEFAULT CHARSET = utf8;
 
 -- Records of option_info
@@ -79,15 +81,15 @@ INSERT INTO `option_info`(`question_id`, `content`) VALUES (2, '9');
 
 -- 填写记录表
 DROP TABLE IF EXISTS `fill_in`;
-CREATE TABLE `fill_in`(
-    `fill_id` int   UNSIGNED AUTO_INCREMENT, -- 填写id
-    `survey_id` int(10) UNSIGNED NOT NULL , -- 问卷id
-    `question_id` int(10) UNSIGNED NOT NULL , -- 问题id
-    `option_id` int(10) UNSIGNED NOT NULL , -- 选项id
-    `user_id` int(10) UNSIGNED DEFAULT NULL, -- 填写者id
-    `fill_in_time`  timestamp DEFAULT  CURRENT_TIMESTAMP, -- 填写时间
-
-    PRIMARY KEY (`fill_id`)
+create table fill_in
+(
+    fill_id      bigint auto_increment
+        primary key,
+    survey_id    bigint                              not null,
+    question_id  bigint                              not null,
+    option_id    bigint                              not null,
+    user_id      bigint                              null,
+    fill_in_time timestamp default CURRENT_TIMESTAMP null
 )ENGINE = InnoDB DEFAULT  CHARSET = utf8;
 
 -- Record of fill_in

@@ -1,15 +1,22 @@
 package com.example.surveysystemtext.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.util.List;
-
+@TableName("user_info")
 @Data
 public class User {
-    private int user_id;
+    @TableId
+    private Long userId;
+
     private String name;
     private String password;
-    private String created_time;
+    private String createdTime;
+    @TableField(exist = false)
     private List<Survey> surveyList;
 
 }

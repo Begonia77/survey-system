@@ -13,23 +13,23 @@ import java.util.List;
 public class OptionController {
     @Autowired
     private OptionMapper optionMapper;
-    @PostMapping("/FindOption")//根据问题id查询所有选项
-    public List<Option> FindOption(@RequestBody Question question){
-        return optionMapper.FindOption(question);
-    }
-
-    @PostMapping("/InsertOption")//添加选项
-    public int InsertOption(@RequestBody Option option){
-        return optionMapper.InsertOption(option);
-    }
-
-    @PostMapping("/UpdateOption")//修改选项
-    public int UpdateOption(@RequestBody Option option){
-        return optionMapper.UpdateOption(option);
-    }
-
-    @PostMapping("/DeleteOption")//删除选项
-    public int DeleteOption(@RequestBody Option option){
-        return optionMapper.DeleteOption(option);
-    }
+//    @PostMapping("/FindOption")//根据问题id查询所有选项
+//    public List<Option> FindOption(@RequestBody Question question){
+//        return optionMapper.FindOption(question);
+//    }
+//
+//    @PostMapping("/InsertOption")//添加选项
+//    public int InsertOption(@RequestBody Option option){
+//        return optionMapper.insert(option);
+//    }
+//
+//    @PostMapping("/UpdateOption")//修改选项
+//    public int UpdateOption(@RequestBody Option option){
+//        return optionMapper.updateById(option);
+//    }
+//
+//    @PostMapping("/DeleteOption")//删除选项
+//    public int DeleteOption(@RequestBody Option option){
+//        return optionMapper.deleteById(option);
+//    }
 }

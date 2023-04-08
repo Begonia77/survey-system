@@ -3,50 +3,26 @@
 <mapper namespace="com.example.surveysystemtext.mapper.QuestionMapper">
 
     <resultMap id="Questio1" type="com.example.surveysystemtext.entity.Question">
-        <result property="survey_id" column="survey_id"/>
-        <result property="question_id" column="question_id"/>
+        <result property="surveyId" column="survey_id"/>
+        <result property="questionId" column="question_id"/>
         <result property="question" column="question"/>
-        <result property="question_order" column="question_order"/>
+        <result property="questionOrder" column="question_order"/>
         <result property="type" column="type"/>
         <result property="remark" column="remark"/>
-        <collection property="OptionList" javaType="List" ofType="com.example.surveysystemtext.entity.Question" column="{question_id=question_id}"
+        <collection property="OptionList" javaType="List" ofType="com.example.surveysystemtext.entity.Question" column="{questionId = question_id}"
                     select="com.example.surveysystemtext.mapper.OptionMapper.FindOption"/>
     </resultMap>
 
     <select id="FindQuestion" parameterType="com.example.surveysystemtext.entity.Survey" resultMap="Questio1">
         SELECT *
             FROM `question_info`
-                WHERE `survey_id` = #{survey_id}
+                WHERE `survey_id` = #{surveyId}
         ORDER BY question_order
     </select>
 
-    <insert id="InsertQuestion" parameterType="com.example.surveysystemtext.entity.Question">
-        INSERT INTO `question_info`(`survey_id`, `question`, `question_order`, `type`, `remark`)
-            VALUES (#{survey_id}, #{question}, #{question_order}, #{type}, #{remark});
-    </insert>
-
-    <update id="UpdateQuestion" parameterType="com.example.surveysystemtext.entity.Question">
-        UPDATE `question_info`
-        <set>
-            <if test="question != null">
-                `question` = #{question},
-            </if>
-            <if test="question_order != null">
-                `question_order` = #{question_order},
-            </if>
-            <if test="type != null">
-                `type` = #{type},
-            </if>
-            <if test="remark != null">
-                `remark` = #{remark}
-            </if>
-        </set>
-        WHERE `question_id` = #{question_id}
-    </update>
-
-    <delete id="DeleteQuestion" parameterType="com.example.surveysystemtext.entity.Question">
-        DELETE
+    <select id="FindQuestion1" parameterType="com.example.surveysystemtext.entity.Question" resultMap="Questio1">
+        SELECT *
             FROM `question_info`
-                WHERE `question_id` = #{question_id}
-    </delete>
+                WHERE `question_id` = #{questionId}
+    </select>
 </mapper>
