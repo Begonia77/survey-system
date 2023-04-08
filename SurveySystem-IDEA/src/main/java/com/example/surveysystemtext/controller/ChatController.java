@@ -17,6 +17,7 @@ import java.net.Proxy;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 public class ChatController {
     Proxy proxy = Proxys.http("127.0.0.1", 7890);
     @Value("${chatgpt.apiKey}")
@@ -62,34 +63,34 @@ public class ChatController {
             respVO = mapper.readValue(result.getContent(), GPTGenerateRespVO.class);
         } catch (Exception e) {
             System.out.println("解析失败");
-            System.out.println(e);
+            e.printStackTrace();
             return new GPTGenerateRespVO();
         }
         return respVO;
     }
 
-    @PostMapping("/description")
-    public GPTDescripeVO description(@RequestBody DataMessage dataMessage) {
-        ChatGPT chatGPT = ChatGPT.builder()
-                .timeout(600)
-                .apiKey(apiKey)
-                .proxy(proxy)
-                .apiHost(apiHost)
-                .build()
-                .init();
-
-        Message message = Message.of("帮我分析下列给出的数据" + dataMessage.getPrompt());
-        ChatCompletion chatCompletion = ChatCompletion.builder()
-                .model(ChatCompletion.Model.GPT_3_5_TURBO.getName())
-                .messages((List.of(message)))
-                .maxTokens(3000)
-                .temperature(0.9)
-                .build();
-
-        ChatCompletionResponse response = chatGPT.chatCompletion(chatCompletion);
-        Message result = response.getChoices().get(0).getMessage();
-        GPTDescripeVO respVO = new GPTDescripeVO();
-        respVO.setContent(result.getContent());
-        return respVO;
-    }
+//    @PostMapping("/description")
+//    public GPTDescripeVO description(@RequestBody DataMessage dataMessage) {
+//        ChatGPT chatGPT = ChatGPT.builder()
+//                .timeout(600)
+//                .apiKey(apiKey)
+//                .proxy(proxy)
+//                .apiHost(apiHost)
+//                .build()
+//                .init();
+//
+//        Message message = Message.of("帮我分析下列给出的数据" + dataMessage.getPrompt());
+//        ChatCompletion chatCompletion = ChatCompletion.builder()
+//                .model(ChatCompletion.Model.GPT_3_5_TURBO.getName())
+//                .messages((List.of(message)))
+//                .maxTokens(3000)
+//                .temperature(0.9)
+//                .build();
+//
+//        ChatCompletionResponse response = chatGPT.chatCompletion(chatCompletion);
+//        Message result = response.getChoices().get(0).getMessage();
+//        GPTDescripeVO respVO = new GPTDescripeVO();
+//        respVO.setContent(result.getContent());
+//        return respVO;
+//    }
 }

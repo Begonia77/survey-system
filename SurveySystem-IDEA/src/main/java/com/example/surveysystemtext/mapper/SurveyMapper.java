@@ -15,5 +15,7 @@ public interface SurveyMapper extends BaseMapper<Survey> {
 
     Survey FindAllSurveyInfo(Survey survey);//查询问卷的所有问题和选项
 
+
+
 }
 
