@@ -152,50 +152,18 @@ public class SurveyController {
         return new CommonResult<>(surveyMapper.findAllSurvey());
     }
 
-//    @PostMapping("/InsertModel")//添加模板
-//    public CommonResult<Survey> InsertModel(@RequestBody Survey survey) {
-//        var sid = survey.getSurveyId();
-//        if (surveyMapper.selectById(sid) == null) {
-//            return new CommonResult<>(400, "查询失败，问卷不存在");
-//        }
-//        //survey1id为新问卷的id，实现自增
-//        Survey survey1 = new Survey();
-//        surveyMapper.insert(survey1);
-//        var sid1 = survey1.getSurveyId();
-//        survey1.setSurveyTitle(survey.getSurveyTitle());
-//        /*
-//         *将survey的所有问题复制给survey1
-//         */
-//        List<Question> questionList = survey.getQuestionList();
-//        for (var q : questionList) {
-//            q.setSurveyId(sid1);
-//            questionMapper.insert(q);
-//            var qid = q.getQuestionId();
-//            /*
-//             * 将survey的所有选项复制给survey1
-//             */
-//            List<Option> optionList = q.getOptionList();
-//            for (var o : optionList) {
-//                o.setQuestionId(qid);
-//                optionMapper.insert(o);
-//            }
-//        }
-//
-//        //将status设为4，表示为模板
-//        survey1.setState(4);
-//        //createdUserId为创建者的id
-//        survey1.setCreatedUserId(survey.getCreatedUserId());
-//        return new CommonResult<>(survey1);
-//    }
 
     @PostMapping("/CreateTemplate") // 通过问卷生成模板
     public CommonResult<Survey> CreateTemplate(@RequestBody Survey survey) {
         // 通过surveyId查找问卷
         Survey oldSurvey = surveyMapper.selectById(survey.getSurveyId());
+        oldSurvey = surveyMapper.FindAllSurveyInfo(oldSurvey);
         if (oldSurvey == null) {
             return new CommonResult<>(400, "生成模板失败，问卷不存在");
         }
-
+        /*
+         *  将oldSurvey的所有属性复制给survey
+         */
         // 设置新模板属性
         survey.setCreatedUserId(1L);
         survey.setSurveyId(null); // 设置为null以实现自增
@@ -203,31 +171,36 @@ public class SurveyController {
         survey.setAnalysis(null); // 去掉原有分析
         survey.setRemark(survey.getRemark()); // 设置备注
         survey.setSurveyTitle(oldSurvey.getSurveyTitle()); // 设置标题
-
         // 插入新模板
         surveyMapper.insert(survey);
-        var sid = survey.getSurveyId();
+        /*
+         * 通过oldsurveyId遍历Question， 然后将获取的question存入到questionList中
+         */
+
+        var sid = survey.getSurveyId(); // 获得新模板的id
         /*
          *  将oldSurvey进行插入到新模板中
          */
-        List<Question> newQuestionList = new ArrayList<>();
         List<Question> questionList = oldSurvey.getQuestionList();
         if (questionList != null) {
             for (var q : questionList) {
                 q.setSurveyId(sid);
+                q.setQuestionId(null);
                 questionMapper.insert(q);
-                var qid = q.getQuestionId();
+                var newQuestion = questionMapper.selectById(q.getQuestionId()); // 返回新插入的问题对象
+                var qid = newQuestion.getQuestionId(); // 获得新问题的id
                 List<Option> optionList = q.getOptionList();
                 if (optionList != null) {
                     for (var o : optionList) {
                         o.setQuestionId(qid);
+                        o.setOptionId(null);
                         optionMapper.insert(o);
                     }
                 }
-                newQuestionList.add(q);
             }
+
         }
-        survey.setQuestionList(newQuestionList);
+        survey.setQuestionList(questionList); // 设置新问题列表
         return new CommonResult<>(survey);
     }
 
