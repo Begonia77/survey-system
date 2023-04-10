@@ -10,6 +10,7 @@ import com.plexpt.chatgpt.entity.chat.ChatCompletionResponse;
 import com.plexpt.chatgpt.entity.chat.Message;
 import com.plexpt.chatgpt.util.Proxys;
 import jakarta.annotation.Resource;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
@@ -156,8 +157,8 @@ public class SurveyController {
     @PostMapping("/CreateTemplate") // 通过问卷生成模板
     public CommonResult<Survey> CreateTemplate(@RequestBody Survey survey) {
         // 通过surveyId查找问卷
-        Survey oldSurvey = surveyMapper.selectById(survey.getSurveyId());
-        oldSurvey = surveyMapper.FindAllSurveyInfo(oldSurvey);
+        survey = surveyMapper.selectById(survey.getSurveyId());
+        Survey oldSurvey = surveyMapper.FindAllSurveyInfo(survey);
         if (oldSurvey == null) {
             return new CommonResult<>(400, "生成模板失败，问卷不存在");
         }
@@ -216,17 +217,22 @@ public class SurveyController {
         /*
          * 插入所有问题
          */
-        for (var q : survey.getQuestionList()) {
-            /*
-             * 插入所有选项
-             */
-            q.setSurveyId(sid);
-            questionMapper.insert(q);
-            var qid = q.getQuestionId();
-
-            for (var o : q.getOptionList()) {
-                o.setQuestionId(qid);
-                optionMapper.insert(o);
+        List<Question> questionList = survey.getQuestionList();
+        if(questionList != null){
+            for (var q : questionList) {
+                /*
+                 * 插入所有选项
+                 */
+                q.setSurveyId(sid);
+                questionMapper.insert(q);
+                var qid = q.getQuestionId();
+                var optionList = q.getOptionList();
+                if(optionList != null){
+                    for (var o : optionList) {
+                        o.setQuestionId(qid);
+                        optionMapper.insert(o);
+                    }
+                }
             }
         }
         return new CommonResult<>(survey);
