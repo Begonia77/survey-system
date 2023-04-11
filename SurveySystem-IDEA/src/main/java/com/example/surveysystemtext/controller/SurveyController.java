@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.Proxy;
-import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin
@@ -192,6 +191,8 @@ public class SurveyController {
                 List<Option> optionList = q.getOptionList();
                 if (optionList != null) {
                     for (var o : optionList) {
+                        if (q.getType() != 1 && q.getType() != 2)
+                            break;
                         o.setQuestionId(qid);
                         o.setOptionId(null);
                         optionMapper.insert(o);
