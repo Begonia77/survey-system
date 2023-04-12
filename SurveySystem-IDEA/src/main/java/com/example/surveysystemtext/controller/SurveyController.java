@@ -147,7 +147,7 @@ public class SurveyController {
 //        return new CommonResult<>(0, "修改成功");
 //    }
 
-    @GetMapping("/FindAllSurvey")//查询所有问卷信息
+    @GetMapping("/FindAllSurvey")//根据id查询所有问卷信息
     public CommonResult<List<Survey>> findAllSurvey() {
         return new CommonResult<>(surveyMapper.findAllSurvey());
     }

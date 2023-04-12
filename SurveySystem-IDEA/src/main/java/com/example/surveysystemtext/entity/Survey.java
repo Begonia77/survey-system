@@ -1,5 +1,6 @@
 package com.example.surveysystemtext.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -11,7 +12,6 @@ import java.util.List;
 public class Survey {
     @TableId
     private Long surveyId;
-
     private Long createdUserId;
     private String surveyTitle;
     private String remark;

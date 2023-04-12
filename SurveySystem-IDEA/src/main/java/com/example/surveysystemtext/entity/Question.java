@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Objects;
 
 @Data
 @TableName("question_info")
@@ -20,10 +21,12 @@ public class Question {
     private String remark;
     @TableField(exist = false)
     List<Option> OptionList;
+    @TableField(exist = false)
+    String content;
 
     public boolean OptionCheckById(Long id){
         for(var o : this.OptionList){
-            if(o.getOptionId() == id){
+            if(Objects.equals(o.getOptionId(), id)){
                 return true;
             }
         }
