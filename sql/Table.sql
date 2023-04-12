@@ -54,9 +54,9 @@ create table question_info
 )ENGINE = InnoDB DEFAULT  CHARSET = utf8;
 
 -- Record of question_info
-INSERT INTO `question_info`(`survey_id`, `question`, `question_order`, `type`, `remark`) VALUES ( 1, '你是否睡午觉？', 1, 0, NULL);
+INSERT INTO `question_info`(`survey_id`, `question`, `question_order`, `type`, `remark`) VALUES ( 1, '你是否睡午觉？', 1, 1, NULL);
 INSERT INTO `question_info`(`survey_id`, `question`, `question_order`, `type`, `remark`) VALUES ( 1, '午睡一般多少时常？', 2, 3, NULL);
-INSERT INTO `question_info`(`survey_id`, `question`, `question_order`, `type`, `remark`) VALUES ( 2, '你是否吃早餐？', 1, 0, NULL);
+INSERT INTO `question_info`(`survey_id`, `question`, `question_order`, `type`, `remark`) VALUES ( 2, '你是否吃早餐？', 1, 1, NULL);
 INSERT INTO `question_info`(`survey_id`, `question`, `question_order`, `type`, `remark`) VALUES ( 2, '你在早餐上花费多少钱？', 2, 3, NULL);
 INSERT INTO `question_info`(`survey_id`, `question`, `question_order`, `type`, `remark`) VALUES ( 3, '你一天睡眠有几个小时？', 1, 3, NULL);
 -- ---------------------------------------------------------------------------------------------------------------------

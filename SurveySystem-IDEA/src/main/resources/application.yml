@@ -9,15 +9,15 @@ spring:
     password: wryte
 
 
-#  server:
-#    port: 8080
+#server:
+#  port: 8080
 #
-#  spring:
-#    datasource:
-#      driver-class-name: com.mysql.cj.jdbc.Driver
-#      url: jdbc:mysql://localhost:3306/surveydb?serverdb=GMT%2b8
-#      username: root
-#      password: JGOWJIj01kG5mZpZ
+#spring:
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/surveydb?serverdb=GMT%2b8
+#    username: root
+#    password: JGOWJIj01kG5mZpZ
 
 mybatis-plus:
   mapper-locations: classpath:mapper/*.xml
