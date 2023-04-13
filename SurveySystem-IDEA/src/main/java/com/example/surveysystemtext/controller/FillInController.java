@@ -4,10 +4,12 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.surveysystemtext.entity.*;
 import com.example.surveysystemtext.mapper.FillInMapper;
 import com.example.surveysystemtext.mapper.OptionMapper;
+import com.example.surveysystemtext.mapper.UserMapper;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @CrossOrigin
 @RestController
@@ -19,6 +21,9 @@ public class FillInController {
     @Resource
     private OptionMapper optionMapper;
 
+    @Resource
+    private UserMapper userMapper;
+
     @GetMapping("/AllFillIn") //所有填写信息
     public CommonResult<List<Fill_in>> AllFillIn(){
         return new CommonResult<>(fillInMapper.selectList(new QueryWrapper<>(null)));
@@ -26,8 +31,19 @@ public class FillInController {
 
     @PostMapping("/InsertFillIn") //保存填写信息
     public CommonResult<Survey> InsertFillIn(@RequestBody Survey survey){
-        if(survey.getSurveyId() == null || survey.getCreatedUserId() == null || survey.getQuestionList() == null){
+        if(survey.getSurveyId() == null || survey.getQuestionList() == null){
             return new CommonResult<>(400, "保存失败");
+        }
+        /*
+         * 如果填写问卷的用户id为空，则通过UUID新建用户获取id再赋值
+         */
+        if(survey.getCreatedUserId() == null){
+            User user = new User();
+            UUID userName = UUID.randomUUID();
+            user.setName(userName.toString());
+            user.setPassword("123456");
+            userMapper.insert(user);
+            survey.setCreatedUserId(user.getUserId());
         }
         List<Question> questionList = survey.getQuestionList();
         for(var q : questionList){
@@ -66,7 +82,7 @@ public class FillInController {
                 Fill_in fillIn = new Fill_in();
                 fillIn.setOptionId(option.getOptionId());
                 fillIn.setSurveyId(survey.getSurveyId());
-                fillIn.setUserId(q.getSurveyId());
+                fillIn.setUserId(survey.getCreatedUserId());
                 fillIn.setQuestionId(q.getQuestionId());
                 fillInMapper.insert(fillIn);
             }
