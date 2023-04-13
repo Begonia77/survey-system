@@ -42,7 +42,7 @@ public class ChatController {
                 输入:
                  {"keyword": "大学生就业情况调查"}
                 输出:
-                 {"questionList":[{"title":"您目前就读的专业属于以下哪种类型？","optionList":[{"text":"理工科"},{"text":"文史类"},{"text":"医学类"},{"text":"艺术类"},{"text":"其他"}]}]}
+                 {"questionList":[{"title":"目前就读的专业类型","optionList":[{"text":"理工科"},{"text":"文史类"},{"text":"医学类"},{"text":"艺术类"},{"text":"其他"}]}]}
                  
                 输入:
                  {"keyword": "%s"}
