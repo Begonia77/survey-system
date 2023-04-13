@@ -60,15 +60,17 @@ public class FillInController {
                  */
                 Long oid = 0L;
                 for(int i = 0; i < s.length(); i ++){
-                    if(s.charAt(i) == ','){
+                    char c = s.charAt(i);
+                    if(c == ','){
                         Fill_in fillIn = new Fill_in();
                         fillIn.setSurveyId(survey.getSurveyId());
                         fillIn.setQuestionId(q.getQuestionId());
                         fillIn.setUserId(survey.getCreatedUserId());
                         fillIn.setOptionId(oid);
                         fillInMapper.insert(fillIn);
+                        oid = 0L;
                     } else {
-                        oid = oid * 10 + s.charAt(i) - '0';
+                        oid = oid * 10 + c - '0';
                     }
                 }
             } else {
