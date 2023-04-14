@@ -226,7 +226,9 @@ public class SurveyController {
                 .build()
                 .init();
 
-        Message message = Message.of("给你一段json格式的数据，这是份问卷的数据，帮我分析下列给出的数据并且以自然语言去描述，具体分析下有多少人选了哪些选项，选项的占比是多少，并以此得出结论，以下是给出的数据：" + dataMessage.getPrompt());
+        Message message = Message.of("""
+        给你一段json格式的数据，这是份问卷的数据，帮我分析下列给出的数据并且以自然语言去对该问卷的结果进行概括和总结，不超过200字，以下是给出的数据：
+        """ + dataMessage.getPrompt());
         ChatCompletion chatCompletion = ChatCompletion.builder()
                 .model(ChatCompletion.Model.GPT_3_5_TURBO.getName())
                 .messages((List.of(message)))
