@@ -30,7 +30,7 @@ public class ChatController {
     public GPTGenerateRespVO generate(@RequestBody DataMessage dataMessage) {
 
         ChatGPT chatGPT = ChatGPT.builder()
-                .timeout(600)
+                .timeout(120)
                 .apiKey(apiKey)
                 .proxy(proxy)
                 .apiHost(apiHost)
