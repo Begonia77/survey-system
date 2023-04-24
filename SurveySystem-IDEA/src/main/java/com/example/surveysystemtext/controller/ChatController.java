@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 @CrossOrigin
 public class ChatController {
-    Proxy proxy = Proxys.http("127.0.0.1", 7890);
+    Proxy proxy = Proxys.http("localhost", 7890);
     @Value("${chatgpt.apiKey}")
     private String apiKey;
     @Value("${chatgpt.apiHost}")

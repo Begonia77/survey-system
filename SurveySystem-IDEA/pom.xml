@@ -72,6 +72,8 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                    <finalName>${project.artifactId}</finalName>
+                    <executable>true</executable>
                 </configuration>
             </plugin>
         </plugins>

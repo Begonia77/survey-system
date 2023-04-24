@@ -21,7 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/Survey")
 public class SurveyController {
-    Proxy proxy = Proxys.http("127.0.0.1", 7890);
+    Proxy proxy = Proxys.http("localhost", 7890);
     @Autowired
     private SurveyMapper surveyMapper;
     @Resource
@@ -227,8 +227,9 @@ public class SurveyController {
                 .init();
 
         Message message = Message.of("""
-        给你一段json格式的数据，这是份问卷的数据，帮我分析下列给出的数据并且以自然语言去对该问卷的结果进行概括和总结，不超过200字，以下是给出的数据：
-        """ + dataMessage.getPrompt());
+                给你一段json格式的数据，这是份问卷的数据，帮我分析下列给出的数据并且以自然语言去对该问卷的结果进行概括和总结，不超过200字，
+                要做到根据每道问题的数据做到归纳总结，以下是给出的数据：
+                """ + dataMessage.getPrompt());
         ChatCompletion chatCompletion = ChatCompletion.builder()
                 .model(ChatCompletion.Model.GPT_3_5_TURBO.getName())
                 .messages((List.of(message)))
